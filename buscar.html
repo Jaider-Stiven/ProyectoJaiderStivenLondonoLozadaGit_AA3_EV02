@@ -29,9 +29,30 @@
             color: var(--dark);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
+        }
+
+        .local-warning {
+            display: none;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 12px 18px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 18px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .local-warning a {
+            color: #b91c1c;
+            font-weight: 700;
+            text-decoration: underline;
         }
 
         .card-buscar {
@@ -175,14 +196,20 @@
 </head>
 <body>
 
+    <!-- Aviso si se abre como archivo local file:// -->
+    <div id="localWarning" class="local-warning">
+        ⚠️ <strong>Atención:</strong> Has abierto este archivo directamente con doble clic (`file:///`). Los archivos <code>.jsp</code> ejecutan código Java en el servidor y requieren Apache Tomcat.<br>
+        👉 <a id="tomcatLink" href="http://localhost:8080/ProyectoJaiderStivenLondonoLozadaGit_AA2_EVO2/buscar.jsp?restaurante=Pizza">Haz clic aquí para abrir en Tomcat: http://localhost:8080/...</a>
+    </div>
+
     <div class="card-buscar">
 
         <span class="badge">🌐 Consumo de API REST en JSP</span>
 
         <h1>Buscador de Restaurantes</h1>
-        <p class="subtitulo">Ingresa un tipo de comida o restaurante para consultar en tiempo real el catálogo de la API externa (TheMealDB).</p>
+        <p class="subtitulo">Ingresa un tipo de comida o restaurante para consultar en tiempo real el catálogo de la API externa (TheMealDB) a través de JSP.</p>
 
-        <form action="buscar.jsp" method="get">
+        <form id="formBuscar" action="buscar.jsp" method="get">
             <div class="form-group">
                 <label for="restaurante">Término de Búsqueda:</label>
                 <input type="text" id="restaurante" name="restaurante" placeholder="Ej: Pizza, Chicken, Pasta, Burger, Beef..." required autofocus>
@@ -207,10 +234,30 @@
 
         <div class="nav-links">
             <a href="index.html">← Ir a Realizar Pedido</a>
-            <a href="buscar.jsp?restaurante=Pizza">Ver Catálogo Completo →</a>
+            <a href="buscar.jsp?restaurante=Pizza">Ver Catálogo en Tomcat →</a>
         </div>
 
     </div>
+
+    <script>
+        // Si el usuario abre el archivo como file:/// en vez de http://localhost:8080/
+        if (window.location.protocol === 'file:') {
+            document.getElementById('localWarning').style.display = 'block';
+
+            // Ajustar los enlaces para que redirijan a Tomcat
+            const tomcatBase = "http://localhost:8080/ProyectoJaiderStivenLondonoLozadaGit_AA2_EVO2/";
+            document.querySelectorAll('a[href^="buscar.jsp"]').forEach(link => {
+                const query = link.getAttribute('href');
+                link.href = tomcatBase + query;
+            });
+
+            document.getElementById('formBuscar').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const valor = encodeURIComponent(document.getElementById('restaurante').value);
+                window.location.href = tomcatBase + "buscar.jsp?restaurante=" + valor;
+            });
+        }
+    </script>
 
 </body>
 </html>

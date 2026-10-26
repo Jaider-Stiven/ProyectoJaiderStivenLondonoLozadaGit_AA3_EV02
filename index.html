@@ -220,6 +220,22 @@
         if (params.has('restaurante')) {
             document.getElementById('restaurante').value = params.get('restaurante');
         }
+
+        // Si se abre localmente como file:///
+        if (window.location.protocol === 'file:') {
+            const tomcatBase = "http://localhost:8080/ProyectoJaiderStivenLondonoLozadaGit_AA2_EVO2/";
+            document.querySelectorAll('a[href^="buscar.jsp"]').forEach(link => {
+                link.href = tomcatBase + "buscar.jsp?restaurante=Pizza";
+            });
+            document.getElementById('formularioPedido').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const cliente = encodeURIComponent(document.getElementById('cliente').value);
+                const rest = encodeURIComponent(document.getElementById('restaurante').value);
+                const comida = encodeURIComponent(document.getElementById('comida').value);
+                const cant = encodeURIComponent(document.getElementById('cantidad').value);
+                window.location.href = tomcatBase + "resultado.jsp?cliente=" + cliente + "&restaurante=" + rest + "&comida=" + comida + "&cantidad=" + cant;
+            });
+        }
     </script>
 
 </body>
