@@ -1,106 +1,226 @@
-<!-- index.html -->
-
-<!-- index.html -->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Sistema de Pedidos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pedidos de Comida - FoodExpress</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --primary: #ff6f00;
+            --primary-dark: #e65100;
+            --secondary: #2e7d32;
+            --dark: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
 
-        body{
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .contenedor{
-            width: 400px;
-            margin: 60px auto;
+        body {
+            background: #f1f5f9;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 480px;
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            padding: 35px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
         }
 
-        h1{
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
+        .badge-sena {
+            background: #ffedd5;
+            color: #c2410c;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 12px;
         }
 
-        label{
-            font-weight: bold;
-            color: #444;
+        h1 {
+            font-size: 24px;
+            color: var(--dark);
+            margin-bottom: 6px;
+            font-weight: 700;
         }
 
-        input{
+        .descripcion {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        input {
             width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
+            padding: 11px 14px;
+            border: 2px solid var(--border);
             border-radius: 8px;
-            box-sizing: border-box;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
         }
 
-        button{
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             border: none;
-            background: #ff9800;
+            background: var(--primary);
             color: white;
-            font-size: 16px;
+            font-size: 15px;
+            font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
         }
 
-        button:hover{
-            background: #e68900;
+        .btn-submit:hover {
+            background: var(--primary-dark);
         }
 
+        .links-seccion {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            transition: 0.2s;
+        }
+
+        .link-card:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #fffaf0;
+        }
+
+        .link-card span.arrow {
+            font-weight: bold;
+        }
+
+        .api-note {
+            margin-top: 15px;
+            font-size: 11px;
+            color: var(--muted);
+            text-align: center;
+        }
     </style>
-
 </head>
 <body>
 
     <div class="contenedor">
 
+        <span class="badge-sena">SENA ADSO | AA2_EV02</span>
+
         <h1>Sistema de Pedidos de Comida</h1>
+        <p class="descripcion">Registra tu pedido en el sistema. Los datos serán procesados y transmitidos a la API REST externa mediante JSP.</p>
 
-        <form action="PedidoServlet" method="post">
+        <!-- Se envía a resultado.jsp para consumo directo de API REST (POST) -->
+        <form action="resultado.jsp" method="post" id="formularioPedido">
 
-            <label>Nombre del cliente:</label>
-            <input type="text" name="cliente" required>
+            <div class="form-group">
+                <label for="cliente">Nombre del Cliente:</label>
+                <input type="text" id="cliente" name="cliente" placeholder="Ej: Jaider Stiven Londoño" required>
+            </div>
 
-            <label>Restaurante:</label>
-            <input type="text" name="restaurante" required>
+            <div class="form-group">
+                <label for="restaurante">Restaurante:</label>
+                <input type="text" id="restaurante" name="restaurante" placeholder="Ej: Pizzería Gourmet Express" required>
+            </div>
 
-            <label>Comida:</label>
-            <input type="text" name="comida" required>
+            <div class="form-group">
+                <label for="comida">Comida o Plato:</label>
+                <input type="text" id="comida" name="comida" placeholder="Ej: Spicy Arrabiata Penne" required>
+            </div>
 
-            <label>Cantidad:</label>
-            <input type="number" name="cantidad" required>
+            <div class="form-group">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" name="cantidad" value="1" min="1" max="100" required>
+            </div>
 
-            <button type="submit">
-                Realizar Pedido
+            <button type="submit" class="btn-submit">
+                ✓ Realizar Pedido (Enviar a API REST)
             </button>
-            <br><br>
 
-            <a href="buscar.html">
-            Buscar restaurante
-            </a>
-            <br><br>
-
-            <a href="buscar.jsp">
-            Buscar restaurante
-            </a>
         </form>
 
+        <div class="links-seccion">
+            <a href="buscar.jsp" class="link-card">
+                <span>🍽️ <strong>Consultar Catálogo API</strong> (TheMealDB en JSP)</span>
+                <span class="arrow">→</span>
+            </a>
+            <a href="buscar.html" class="link-card">
+                <span>🔍 <strong>Buscador HTML</strong> de Restaurantes</span>
+                <span class="arrow">→</span>
+            </a>
+        </div>
+
+        <p class="api-note">Conectado a APIs REST: TheMealDB (GET en buscar.jsp) y JSONPlaceholder (POST en resultado.jsp)</p>
+
     </div>
+
+    <!-- Script para autocompletar si se seleccionó un plato desde buscar.jsp -->
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('comida')) {
+            document.getElementById('comida').value = params.get('comida');
+        }
+        if (params.has('restaurante')) {
+            document.getElementById('restaurante').value = params.get('restaurante');
+        }
+    </script>
 
 </body>
 </html>

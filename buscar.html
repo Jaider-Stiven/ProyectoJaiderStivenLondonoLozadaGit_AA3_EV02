@@ -1,9 +1,216 @@
-<form action="buscar.jsp" method="get">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Restaurantes y Comida - API REST</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <input type="text" name="restaurante">
+    <style>
+        :root {
+            --primary: #ff6f00;
+            --primary-dark: #e65100;
+            --dark: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
 
-    <button type="submit">
-        Buscar
-    </button>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
 
-</form>
+        body {
+            background: #f1f5f9;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card-buscar {
+            background: white;
+            max-width: 500px;
+            width: 100%;
+            padding: 35px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .badge {
+            background: #ffedd5;
+            color: #c2410c;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        p.subtitulo {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 13px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--primary-dark);
+        }
+
+        .tags-container {
+            margin-top: 25px;
+            text-align: left;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .tags-container span {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tags a {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--dark);
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .tags a:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-links {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .nav-links a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-buscar">
+
+        <span class="badge">🌐 Consumo de API REST en JSP</span>
+
+        <h1>Buscador de Restaurantes</h1>
+        <p class="subtitulo">Ingresa un tipo de comida o restaurante para consultar en tiempo real el catálogo de la API externa (TheMealDB).</p>
+
+        <form action="buscar.jsp" method="get">
+            <div class="form-group">
+                <label for="restaurante">Término de Búsqueda:</label>
+                <input type="text" id="restaurante" name="restaurante" placeholder="Ej: Pizza, Chicken, Pasta, Burger, Beef..." required autofocus>
+            </div>
+
+            <button type="submit">
+                🔍 Buscar en la API REST (JSP)
+            </button>
+        </form>
+
+        <div class="tags-container">
+            <span>Búsquedas directas sugeridas:</span>
+            <div class="tags">
+                <a href="buscar.jsp?restaurante=Pizza">🍕 Pizza</a>
+                <a href="buscar.jsp?restaurante=Burger">🍔 Burger</a>
+                <a href="buscar.jsp?restaurante=Chicken">🍗 Chicken</a>
+                <a href="buscar.jsp?restaurante=Pasta">🍝 Pasta</a>
+                <a href="buscar.jsp?restaurante=Taco">🌮 Taco</a>
+                <a href="buscar.jsp?restaurante=Salad">🥗 Salad</a>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">← Ir a Realizar Pedido</a>
+            <a href="buscar.jsp?restaurante=Pizza">Ver Catálogo Completo →</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
