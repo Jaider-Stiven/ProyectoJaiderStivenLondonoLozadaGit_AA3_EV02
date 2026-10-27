@@ -199,7 +199,7 @@
     <!-- Aviso si se abre como archivo local file:// -->
     <div id="localWarning" class="local-warning">
         ⚠️ <strong>Atención:</strong> Has abierto este archivo directamente con doble clic (`file:///`). Los archivos <code>.jsp</code> ejecutan código Java en el servidor y requieren Apache Tomcat.<br>
-        👉 <a id="tomcatLink" href="http://localhost:8080/ProyectoJaiderStivenLondonoLozadaGit_AA2_EVO2/buscar.jsp?restaurante=Pizza">Haz clic aquí para abrir en Tomcat: http://localhost:8080/...</a>
+        👉 <a id="tomcatLink" href="http://localhost:8080/ProyectoJaiderStivenLondonoLozadaGit_AA3_EV02/buscar.jsp?restaurante=Pizza">Haz clic aquí para abrir en Tomcat: http://localhost:8080/...</a>
     </div>
 
     <div class="card-buscar">
@@ -245,7 +245,7 @@
             document.getElementById('localWarning').style.display = 'block';
 
             // Ajustar los enlaces para que redirijan a Tomcat
-            const tomcatBase = "http://localhost:8080/ProyectoJaiderStivenLondonoLozadaGit_AA2_EVO2/";
+            const tomcatBase = "http://localhost:8080/ProyectoJaiderStivenLondonoLozadaGit_AA3_EV02/";
             document.querySelectorAll('a[href^="buscar.jsp"]').forEach(link => {
                 const query = link.getAttribute('href');
                 link.href = tomcatBase + query;

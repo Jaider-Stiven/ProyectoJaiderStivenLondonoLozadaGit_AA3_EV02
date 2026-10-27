@@ -3,240 +3,743 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Pedidos de Comida - FoodExpress</title>
+    <title>FoodExpress - Módulo de Pedidos y Validación (SENA AA3-EV02)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary: #ff6f00;
-            --primary-dark: #e65100;
-            --secondary: #2e7d32;
+            --primary: #f97316;
+            --primary-hover: #ea580c;
+            --secondary: #10b981;
+            --secondary-dark: #047857;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
+            --warning: #f59e0b;
             --dark: #0f172a;
-            --muted: #64748b;
+            --slate-600: #475569;
+            --slate-400: #94a3b8;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
             --border: #e2e8f0;
+            --radius-lg: 18px;
+            --radius-md: 10px;
+            --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background: #f1f5f9;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             color: var(--dark);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 30px 15px;
+            padding: 40px 15px;
         }
 
-        .contenedor {
-            width: 100%;
-            max-width: 480px;
-            background: white;
-            padding: 35px 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border: 1px solid var(--border);
+        .header-sena {
+            text-align: center;
+            margin-bottom: 25px;
+            max-width: 600px;
         }
 
-        .badge-sena {
-            background: #ffedd5;
-            color: #c2410c;
-            font-size: 11px;
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff;
+            color: var(--primary);
+            border: 1px solid #fed7aa;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 12px;
             font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
-            display: inline-block;
+            text-transform: uppercase;
+            box-shadow: 0 2px 6px rgba(249, 115, 22, 0.1);
             margin-bottom: 12px;
         }
 
-        h1 {
-            font-size: 24px;
+        .header-sena h1 {
+            font-size: 28px;
+            font-weight: 800;
             color: var(--dark);
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .header-sena p {
+            font-size: 14px;
+            color: var(--slate-600);
+        }
+
+        .contenedor-principal {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            max-width: 640px;
+            width: 100%;
+            padding: 36px 32px;
+        }
+
+        /* Barra de acciones de prueba rápida */
+        .test-toolbar {
+            background: var(--slate-50);
+            border: 1px dashed #cbd5e1;
+            padding: 14px;
+            border-radius: var(--radius-md);
+            margin-bottom: 25px;
+        }
+
+        .test-toolbar-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--slate-600);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .test-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .btn-test {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--slate-600);
+            transition: all 0.2s;
+        }
+
+        .btn-test:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #fff7ed;
+        }
+
+        .btn-test.valid {
+            border-color: #86efac;
+            color: #15803d;
+            background: #f0fdf4;
+        }
+
+        .btn-test.invalid {
+            border-color: #fca5a5;
+            color: #b91c1c;
+            background: #fef2f2;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .campo-grupo {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        label span.req {
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        label span.hint {
+            font-size: 11px;
+            font-weight: normal;
+            color: var(--slate-400);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 11px 14px;
+            font-size: 14px;
+            color: var(--dark);
+            background: #fff;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: all 0.2s ease-in-out;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+        }
+
+        input.error, textarea.error {
+            border-color: var(--danger) !important;
+            background-color: #fffbfa;
+        }
+
+        input.valid, textarea.valid {
+            border-color: var(--secondary) !important;
+        }
+
+        .msg-error {
+            display: none;
+            color: var(--danger);
+            font-size: 11.5px;
+            margin-top: 4px;
+            font-weight: 500;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .msg-error.visible {
+            display: flex;
+        }
+
+        .char-counter {
+            font-size: 11px;
+            color: var(--slate-400);
+            text-align: right;
+            margin-top: 3px;
+        }
+
+        /* Resumen de validaciones */
+        .validation-summary {
+            margin-top: 20px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            display: none;
+        }
+
+        .validation-summary.active {
+            display: block;
+            border-color: #fecaca;
+            background: var(--danger-bg);
+        }
+
+        .validation-summary h4 {
+            font-size: 12.5px;
+            color: #991b1b;
             margin-bottom: 6px;
             font-weight: 700;
         }
 
-        .descripcion {
-            font-size: 13px;
-            color: var(--muted);
-            margin-bottom: 25px;
+        .validation-summary ul {
+            list-style-position: inside;
+            font-size: 12px;
+            color: #b91c1c;
             line-height: 1.5;
         }
 
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 6px;
-        }
-
-        input {
-            width: 100%;
-            padding: 11px 14px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-            transition: 0.2s;
-        }
-
-        input:focus {
-            border-color: var(--primary);
-        }
-
+        /* Botón de Enviar */
         .btn-submit {
             width: 100%;
-            padding: 13px;
-            border: none;
             background: var(--primary);
-            color: white;
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: var(--radius-md);
             font-size: 15px;
-            font-weight: 600;
-            border-radius: 8px;
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.2s;
-            margin-top: 10px;
+            transition: background 0.2s, transform 0.1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 22px;
         }
 
         .btn-submit:hover {
-            background: var(--primary-dark);
+            background: var(--primary-hover);
         }
 
-        .links-seccion {
-            margin-top: 25px;
-            padding-top: 20px;
+        .btn-submit:active {
+            transform: scale(0.99);
+        }
+
+        /* Enlaces secundarios */
+        .footer-nav {
+            margin-top: 24px;
+            padding-top: 18px;
             border-top: 1px solid var(--border);
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
         }
 
-        .link-card {
+        .footer-nav a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: #f8fafc;
-            padding: 12px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--dark);
-            font-size: 13px;
-            font-weight: 500;
-            border: 1px solid var(--border);
-            transition: 0.2s;
+            gap: 4px;
         }
 
-        .link-card:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: #fffaf0;
+        .footer-nav a:hover {
+            text-decoration: underline;
         }
 
-        .link-card span.arrow {
-            font-weight: bold;
-        }
-
-        .api-note {
-            margin-top: 15px;
+        .badge-footer {
             font-size: 11px;
-            color: var(--muted);
+            color: var(--slate-400);
             text-align: center;
+            margin-top: 16px;
         }
     </style>
 </head>
 <body>
 
-    <div class="contenedor">
+    <header class="header-sena">
+        <span class="tag-pill">🌱 SENA ADSO | GA7-220501096-AA3-EV02</span>
+        <h1>FoodExpress - Módulo de Pedidos</h1>
+        <p>Pruebas de software codificadas y validadas con consumo de APIs REST</p>
+    </header>
 
-        <span class="badge-sena">SENA ADSO | AA2_EV02</span>
+    <main class="contenedor-principal">
 
-        <h1>Sistema de Pedidos de Comida</h1>
-        <p class="descripcion">Registra tu pedido en el sistema. Los datos serán procesados y transmitidos a la API REST externa mediante JSP.</p>
+        <!-- Barra de botones de prueba rápida para sustentación y pantallazos -->
+        <section class="test-toolbar">
+            <div class="test-toolbar-title">
+                🧪 Banco de Pruebas Rápidas de Validación (Historias de Usuario / Casos de Prueba):
+            </div>
+            <div class="test-buttons">
+                <button type="button" class="btn-test valid" onclick="cargarCasoValido()">✅ CP-01: Pedido Válido</button>
+                <button type="button" class="btn-test invalid" onclick="cargarCasoFechaPasada()">❌ CP-03: Fecha Pasada</button>
+                <button type="button" class="btn-test invalid" onclick="cargarCasoCantidadInvalida()">❌ CP-05: Cantidad Negativa</button>
+                <button type="button" class="btn-test invalid" onclick="cargarCasoCaracteresEspeciales()">❌ CP-10: Inyección XSS</button>
+                <button type="button" class="btn-test invalid" onclick="cargarCasoLongitudCorta()">❌ CP-09: Longitud &lt; 3</button>
+                <button type="button" class="btn-test" onclick="limpiarFormulario()">🔄 Limpiar</button>
+            </div>
+        </section>
 
-        <!-- Se envía a resultado.jsp para consumo directo de API REST (POST) -->
-        <form action="resultado.jsp" method="post" id="formularioPedido">
+        <!-- Formulario principal con validaciones exhaustivas -->
+        <form action="resultado.jsp" method="post" id="formularioPedido" novalidate>
 
-            <div class="form-group">
-                <label for="cliente">Nombre del Cliente:</label>
-                <input type="text" id="cliente" name="cliente" placeholder="Ej: Jaider Stiven Londoño" required>
+            <div class="form-grid">
+
+                <!-- 1. Validación de Texto y Longitud: Cliente -->
+                <div class="campo-grupo">
+                    <label for="cliente">
+                        Nombre del Cliente <span class="req">*</span>
+                        <span class="hint">Min. 3 - Max. 60 letras</span>
+                    </label>
+                    <input type="text" id="cliente" name="cliente" 
+                           placeholder="Ej: Jaider Stiven Londoño" 
+                           required minlength="3" maxlength="60" 
+                           autocomplete="off">
+                    <div class="msg-error" id="err-cliente">⚠️ Debe ingresar un nombre válido (solo letras, 3 a 60 caracteres).</div>
+                </div>
+
+                <!-- 2. Validación de Teléfono (Numérico y 10 dígitos) -->
+                <div class="campo-grupo">
+                    <label for="telefono">
+                        Teléfono Móvil <span class="req">*</span>
+                        <span class="hint">10 dígitos numéricos</span>
+                    </label>
+                    <input type="tel" id="telefono" name="telefono" 
+                           placeholder="Ej: 3104567890" 
+                           required pattern="[0-9]{10}" maxlength="10" 
+                           autocomplete="off">
+                    <div class="msg-error" id="err-telefono">⚠️ Ingrese un número de 10 dígitos (solo números).</div>
+                </div>
+
+                <!-- 3. Restaurante -->
+                <div class="campo-grupo">
+                    <label for="restaurante">
+                        Restaurante <span class="req">*</span>
+                        <span class="hint">Min. 3 caracteres</span>
+                    </label>
+                    <input type="text" id="restaurante" name="restaurante" 
+                           placeholder="Ej: Pizzería Gourmet Express" 
+                           required minlength="3" maxlength="50">
+                    <div class="msg-error" id="err-restaurante">⚠️ Ingrese un nombre de restaurante válido (sin símbolos peligrosos).</div>
+                </div>
+
+                <!-- 4. Plato o Comida -->
+                <div class="campo-grupo">
+                    <label for="comida">
+                        Plato o Menú <span class="req">*</span>
+                        <span class="hint">Min. 3 caracteres</span>
+                    </label>
+                    <input type="text" id="comida" name="comida" 
+                           placeholder="Ej: Spicy Arrabiata Penne" 
+                           required minlength="3" maxlength="50">
+                    <div class="msg-error" id="err-comida">⚠️ Ingrese el nombre del plato deseado.</div>
+                </div>
+
+                <!-- 5. Validación de Números: Cantidad -->
+                <div class="campo-grupo">
+                    <label for="cantidad">
+                        Cantidad <span class="req">*</span>
+                        <span class="hint">Entero entre 1 y 100</span>
+                    </label>
+                    <input type="number" id="cantidad" name="cantidad" 
+                           value="1" min="1" max="100" step="1" required>
+                    <div class="msg-error" id="err-cantidad">⚠️ La cantidad debe ser un número entero entre 1 y 100.</div>
+                </div>
+
+                <!-- 6. Validación de Fechas: Fecha de Entrega -->
+                <div class="campo-grupo">
+                    <label for="fechaEntrega">
+                        Fecha de Entrega <span class="req">*</span>
+                        <span class="hint">Hoy o fecha futura</span>
+                    </label>
+                    <input type="date" id="fechaEntrega" name="fechaEntrega" required>
+                    <div class="msg-error" id="err-fecha">⚠️ La fecha no puede ser anterior al día de hoy ni superior a 30 días.</div>
+                </div>
+
+                <!-- 7. Validación de Observaciones y Caracteres Especiales -->
+                <div class="campo-grupo full-width">
+                    <label for="observaciones">
+                        Observaciones Especiales
+                        <span class="hint">Instrucciones de entrega / sin caracteres peligrosos</span>
+                    </label>
+                    <textarea id="observaciones" name="observaciones" rows="2" 
+                              maxlength="200" placeholder="Ej: Entregar en portería, salsa extra, etc."></textarea>
+                    <div class="char-counter"><span id="contadorChars">0</span>/200 caracteres</div>
+                    <div class="msg-error" id="err-observaciones">⚠️ No se permiten caracteres especiales como &lt;, &gt;, &quot;, &#x27;, ;, %.</div>
+                </div>
+
             </div>
 
-            <div class="form-group">
-                <label for="restaurante">Restaurante:</label>
-                <input type="text" id="restaurante" name="restaurante" placeholder="Ej: Pizzería Gourmet Express" required>
+            <!-- Resumen de errores -->
+            <div class="validation-summary" id="resumenErrores">
+                <h4>⚠️ Errores de Validación Encontrados:</h4>
+                <ul id="listaErrores"></ul>
             </div>
 
-            <div class="form-group">
-                <label for="comida">Comida o Plato:</label>
-                <input type="text" id="comida" name="comida" placeholder="Ej: Spicy Arrabiata Penne" required>
-            </div>
-
-            <div class="form-group">
-                <label for="cantidad">Cantidad:</label>
-                <input type="number" id="cantidad" name="cantidad" value="1" min="1" max="100" required>
-            </div>
-
-            <button type="submit" class="btn-submit">
-                ✓ Realizar Pedido (Enviar a API REST)
+            <!-- Botón Enviar -->
+            <button type="submit" class="btn-submit" id="btnEnviar">
+                🚀 Validar y Procesar Pedido (API REST POST)
             </button>
 
         </form>
 
-        <div class="links-seccion">
-            <a href="buscar.jsp" class="link-card">
-                <span>🍽️ <strong>Consultar Catálogo API</strong> (TheMealDB en JSP)</span>
-                <span class="arrow">→</span>
-            </a>
-            <a href="buscar.html" class="link-card">
-                <span>🔍 <strong>Buscador HTML</strong> de Restaurantes</span>
-                <span class="arrow">→</span>
-            </a>
-        </div>
+        <footer class="footer-nav">
+            <a href="buscar.html">🔍 Buscar en Catálogo (TheMealDB)</a>
+            <a href="buscar.jsp?restaurante=Pizza">📋 Ver Catálogo JSP</a>
+        </footer>
 
-        <p class="api-note">Conectado a APIs REST: TheMealDB (GET en buscar.jsp) y JSONPlaceholder (POST en resultado.jsp)</p>
+        <p class="badge-footer">
+            Aprendiz: <strong>Jaider Stiven Londoño Lozada</strong> | Evidencia GA7-220501096-AA3-EV02 | ADSO
+        </p>
 
-    </div>
+    </main>
 
-    <!-- Script para autocompletar si se seleccionó un plato desde buscar.jsp -->
     <script>
-        const params = new URLSearchParams(window.location.search);
-        if (params.has('comida')) {
-            document.getElementById('comida').value = params.get('comida');
-        }
-        if (params.has('restaurante')) {
-            document.getElementById('restaurante').value = params.get('restaurante');
+        // Configuración inicial de fechas
+        const inputFecha = document.getElementById('fechaEntrega');
+        const hoy = new Date();
+        const yyyy = hoy.getFullYear();
+        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dd = String(hoy.getDate()).padStart(2, '0');
+        const fechaActualISO = `${yyyy}-${mm}-${dd}`;
+        
+        // Límite de 30 días
+        const limiteMax = new Date();
+        limiteMax.setDate(limiteMax.getDate() + 30);
+        const maxYYYY = limiteMax.getFullYear();
+        const maxMM = String(limiteMax.getMonth() + 1).padStart(2, '0');
+        const maxDD = String(limiteMax.getDate()).padStart(2, '0');
+        const fechaMaxISO = `${maxYYYY}-${maxMM}-${maxDD}`;
+
+        inputFecha.min = fechaActualISO;
+        inputFecha.max = fechaMaxISO;
+        inputFecha.value = fechaActualISO;
+
+        // Contador de caracteres
+        const inputObs = document.getElementById('observaciones');
+        const contador = document.getElementById('contadorChars');
+        inputObs.addEventListener('input', () => {
+            contador.textContent = inputObs.value.length;
+        });
+
+        // Expresiones regulares
+        const regexLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]{3,60}$/;
+        const regexPeligrosos = /[<>"';`%\\=]/;
+        const regexTelefono = /^[0-9]{10}$/;
+
+        // Validaciones en tiempo real
+        function validarCliente() {
+            const input = document.getElementById('cliente');
+            const err = document.getElementById('err-cliente');
+            const v = input.value.trim();
+            if (v.length < 3 || v.length > 60 || !regexLetras.test(v) || regexPeligrosos.test(v)) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                err.classList.add('visible');
+                return false;
+            }
+            input.classList.remove('error');
+            input.classList.add('valid');
+            err.classList.remove('visible');
+            return true;
         }
 
-        // Si se abre localmente como file:///
-        if (window.location.protocol === 'file:') {
-            const tomcatBase = "http://localhost:8080/ProyectoJaiderStivenLondonoLozadaGit_AA2_EVO2/";
-            document.querySelectorAll('a[href^="buscar.jsp"]').forEach(link => {
-                link.href = tomcatBase + "buscar.jsp?restaurante=Pizza";
-            });
-            document.getElementById('formularioPedido').addEventListener('submit', function(e) {
+        function validarTelefono() {
+            const input = document.getElementById('telefono');
+            const err = document.getElementById('err-telefono');
+            const v = input.value.trim();
+            if (!regexTelefono.test(v)) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                err.classList.add('visible');
+                return false;
+            }
+            input.classList.remove('error');
+            input.classList.add('valid');
+            err.classList.remove('visible');
+            return true;
+        }
+
+        function validarRestaurante() {
+            const input = document.getElementById('restaurante');
+            const err = document.getElementById('err-restaurante');
+            const v = input.value.trim();
+            if (v.length < 3 || v.length > 50 || regexPeligrosos.test(v)) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                err.classList.add('visible');
+                return false;
+            }
+            input.classList.remove('error');
+            input.classList.add('valid');
+            err.classList.remove('visible');
+            return true;
+        }
+
+        function validarComida() {
+            const input = document.getElementById('comida');
+            const err = document.getElementById('err-comida');
+            const v = input.value.trim();
+            if (v.length < 3 || v.length > 50 || regexPeligrosos.test(v)) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                err.classList.add('visible');
+                return false;
+            }
+            input.classList.remove('error');
+            input.classList.add('valid');
+            err.classList.remove('visible');
+            return true;
+        }
+
+        function validarCantidad() {
+            const input = document.getElementById('cantidad');
+            const err = document.getElementById('err-cantidad');
+            const n = parseInt(input.value, 10);
+            if (isNaN(n) || n < 1 || n > 100) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                err.classList.add('visible');
+                return false;
+            }
+            input.classList.remove('error');
+            input.classList.add('valid');
+            err.classList.remove('visible');
+            return true;
+        }
+
+        function validarFecha() {
+            const input = document.getElementById('fechaEntrega');
+            const err = document.getElementById('err-fecha');
+            const val = input.value;
+            if (!val || val < fechaActualISO || val > fechaMaxISO) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                err.classList.add('visible');
+                return false;
+            }
+            input.classList.remove('error');
+            input.classList.add('valid');
+            err.classList.remove('visible');
+            return true;
+        }
+
+        function validarObservaciones() {
+            const input = document.getElementById('observaciones');
+            const err = document.getElementById('err-observaciones');
+            const v = input.value;
+            if (v.length > 200 || regexPeligrosos.test(v)) {
+                input.classList.add('error');
+                input.classList.remove('valid');
+                err.classList.add('visible');
+                return false;
+            }
+            input.classList.remove('error');
+            input.classList.add('valid');
+            err.classList.remove('visible');
+            return true;
+        }
+
+        // Listeners de eventos de entrada y blur
+        document.getElementById('cliente').addEventListener('blur', validarCliente);
+        document.getElementById('telefono').addEventListener('blur', validarTelefono);
+        document.getElementById('restaurante').addEventListener('blur', validarRestaurante);
+        document.getElementById('comida').addEventListener('blur', validarComida);
+        document.getElementById('cantidad').addEventListener('blur', validarCantidad);
+        document.getElementById('fechaEntrega').addEventListener('change', validarFecha);
+        document.getElementById('observaciones').addEventListener('input', validarObservaciones);
+
+        // Envío del formulario
+        document.getElementById('formularioPedido').addEventListener('submit', function(e) {
+            const okCliente = validarCliente();
+            const okTel = validarTelefono();
+            const okRest = validarRestaurante();
+            const okComida = validarComida();
+            const okCant = validarCantidad();
+            const okFecha = validarFecha();
+            const okObs = validarObservaciones();
+
+            const todosValidos = okCliente && okTel && okRest && okComida && okCant && okFecha && okObs;
+            
+            const resumen = document.getElementById('resumenErrores');
+            const lista = document.getElementById('listaErrores');
+            lista.innerHTML = '';
+
+            if (!todosValidos) {
                 e.preventDefault();
-                const cliente = encodeURIComponent(document.getElementById('cliente').value);
-                const rest = encodeURIComponent(document.getElementById('restaurante').value);
-                const comida = encodeURIComponent(document.getElementById('comida').value);
-                const cant = encodeURIComponent(document.getElementById('cantidad').value);
-                window.location.href = tomcatBase + "resultado.jsp?cliente=" + cliente + "&restaurante=" + rest + "&comida=" + comida + "&cantidad=" + cant;
+                resumen.classList.add('active');
+                if (!okCliente) lista.innerHTML += '<li>Nombre del cliente: mínimo 3 letras, sin números ni símbolos.</li>';
+                if (!okTel) lista.innerHTML += '<li>Teléfono móvil: debe contener exactamente 10 dígitos.</li>';
+                if (!okRest) lista.innerHTML += '<li>Restaurante: mínimo 3 caracteres válidos.</li>';
+                if (!okComida) lista.innerHTML += '<li>Plato o menú: mínimo 3 caracteres válidos.</li>';
+                if (!okCant) lista.innerHTML += '<li>Cantidad: número entero positivo entre 1 y 100.</li>';
+                if (!okFecha) lista.innerHTML += '<li>Fecha de entrega: no puede ser en el pasado ni superar 30 días.</li>';
+                if (!okObs) lista.innerHTML += '<li>Observaciones: no incluir caracteres peligrosos (&lt;, &gt;, &quot;, &#x27;, ;).</li>';
+                return;
+            }
+
+            resumen.classList.remove('active');
+
+            // Soporte si se ejecuta como archivo local sin Tomcat
+            if (window.location.protocol === 'file:') {
+                e.preventDefault();
+                const params = new URLSearchParams({
+                    cliente: document.getElementById('cliente').value,
+                    telefono: document.getElementById('telefono').value,
+                    restaurante: document.getElementById('restaurante').value,
+                    comida: document.getElementById('comida').value,
+                    cantidad: document.getElementById('cantidad').value,
+                    fechaEntrega: document.getElementById('fechaEntrega').value,
+                    observaciones: document.getElementById('observaciones').value
+                });
+                alert('✅ Validación en Cliente Aprobada.\nRedirigiendo a Tomcat para validación Backend y Consumo API REST...');
+                window.location.href = "http://localhost:8080/ProyectoJaiderStivenLondonoLozadaGit_AA3_EV02/resultado.jsp?" + params.toString();
+            }
+        });
+
+        // Funciones auxiliares para pruebas rápidas
+        function cargarCasoValido() {
+            document.getElementById('cliente').value = "Jaider Stiven Londoño";
+            document.getElementById('telefono').value = "3104567890";
+            document.getElementById('restaurante').value = "Pizzería Gourmet Express";
+            document.getElementById('comida').value = "Spicy Arrabiata Penne";
+            document.getElementById('cantidad').value = "2";
+            document.getElementById('fechaEntrega').value = fechaActualISO;
+            document.getElementById('observaciones').value = "Favor entregar con salsa extra y cubiertos.";
+            contador.textContent = document.getElementById('observaciones').value.length;
+            limpiarErroresVisuales();
+            validarCliente();
+            validarTelefono();
+            validarRestaurante();
+            validarComida();
+            validarCantidad();
+            validarFecha();
+            validarObservaciones();
+        }
+
+        function cargarCasoFechaPasada() {
+            cargarCasoValido();
+            document.getElementById('fechaEntrega').value = "2026-05-15";
+            validarFecha();
+        }
+
+        function cargarCasoCantidadInvalida() {
+            cargarCasoValido();
+            document.getElementById('cantidad').value = "-5";
+            validarCantidad();
+        }
+
+        function cargarCasoCaracteresEspeciales() {
+            cargarCasoValido();
+            document.getElementById('cliente').value = "Jaider <script>alert('xss')<" + "/script>";
+            document.getElementById('observaciones').value = "DROP TABLE pedidos; --";
+            validarCliente();
+            validarObservaciones();
+        }
+
+        function cargarCasoLongitudCorta() {
+            cargarCasoValido();
+            document.getElementById('cliente').value = "Al";
+            document.getElementById('restaurante').value = "La";
+            validarCliente();
+            validarRestaurante();
+        }
+
+        function limpiarFormulario() {
+            document.getElementById('formularioPedido').reset();
+            inputFecha.value = fechaActualISO;
+            contador.textContent = "0";
+            limpiarErroresVisuales();
+        }
+
+        function limpiarErroresVisuales() {
+            document.querySelectorAll('input, textarea').forEach(el => {
+                el.classList.remove('error', 'valid');
             });
+            document.querySelectorAll('.msg-error').forEach(el => {
+                el.classList.remove('visible');
+            });
+            document.getElementById('resumenErrores').classList.remove('active');
+        }
+
+        // Autocompletar desde URL o ejecutar caso de prueba vía parámetro ?test=
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('comida')) document.getElementById('comida').value = urlParams.get('comida');
+        if (urlParams.has('restaurante')) document.getElementById('restaurante').value = urlParams.get('restaurante');
+
+        if (urlParams.get('test') === 'valido') cargarCasoValido();
+        if (urlParams.get('test') === 'fecha') cargarCasoFechaPasada();
+        if (urlParams.get('test') === 'cantidad') cargarCasoCantidadInvalida();
+        if (urlParams.get('test') === 'xss') cargarCasoCaracteresEspeciales();
+        if (urlParams.get('test') === 'longitud') cargarCasoLongitudCorta();
+        if (urlParams.get('test') === 'vacios') {
+            document.getElementById('btnEnviar').click();
         }
     </script>
-
 </body>
 </html>

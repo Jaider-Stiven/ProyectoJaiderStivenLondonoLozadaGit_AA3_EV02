@@ -470,7 +470,7 @@
         <div class="header-content">
             <div class="header-title">
                 <h1>Sistema FoodExpress - Consumo de API en JSP</h1>
-                <p>Evidencia SENA GA7-220501096-AA2-EV02 | Aprendiz: Jaider Stiven Londoño Lozada</p>
+                <p>Evidencia SENA GA7-220501096-AA3-EV02 | Aprendiz: Jaider Stiven Londoño Lozada</p>
             </div>
             <nav class="header-nav">
                 <a href="index.html">← Formulario de Pedido</a>
@@ -589,7 +589,7 @@
         <% } %>
 
         <footer>
-            <p>Proyecto Jaider Stiven Londoño Lozada - Evidencia AA2_EV02 | Consumo de API REST con JSP / Java</p>
+            <p>Proyecto Jaider Stiven Londoño Lozada - Evidencia AA3_EV02 | Consumo de API REST con JSP / Java</p>
         </footer>
 
     </div>
